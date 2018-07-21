@@ -18,6 +18,13 @@ var server = http.createServer(function(req, ret) {
 	var trimmedPath = path.replace(/^\/+|\/+$/g,'');
 	console.log('received a request with path: ' + path);
 	console.log('received a request with trimmedPath: ' + trimmedPath);
+	// get the http method
+	var method = req.method.toLowerCase();
+	// get the query
+	var queryStringObject = parsedUrl.query;
+	// get headers (use postman plugin for safari)
+	var headers = req.headers;
+
 	// send response
 	ret.end(message);
 
