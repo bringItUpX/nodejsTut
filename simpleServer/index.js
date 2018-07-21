@@ -49,6 +49,7 @@ req.on('end', function (){
 		data = typeof(data) == 'object' ? data : {};
 
 		// send response
+		ret.setHeader('Content-Type', 'application/json');
 		ret.writeHead(statusCode);
 		ret.end(JSON.stringify(data));
 		// log the send message
