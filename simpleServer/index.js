@@ -11,7 +11,15 @@ var url  = require('url');
 var StringDecoder = require('string_decoder').StringDecoder;
 
 var server = http.createServer(function(req, ret) {
-	var message = 'Hello to Pirple!';
+	unifiedServer(req, ret);
+})
+
+server.listen(3000, function(){
+	console.log('server has started to listing on port 3000');
+})
+
+var unifiedServer = function(req, ret) {
+		var message = 'Hello to Pirple!';
 	// get url
 	var parsedUrl = url.parse(req.url, true);
 	// get path
@@ -56,11 +64,9 @@ req.on('end', function (){
 		console.log('statusCode: ' + statusCode + ' answer: ' + JSON.stringify(data));
 	})
 })
-})
+}
 
-server.listen(3000, function(){
-	console.log('server has started to listing on port 3000');
-})
+// all handlers
 
 var handlers = {};
 
@@ -72,6 +78,7 @@ handlers.notFound = function (data, callback){
 	callback(404, {});
 }
 
+// the router from path to right handler
 var router = {
 	"sample" : handlers.sample
 };
