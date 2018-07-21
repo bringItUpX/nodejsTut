@@ -9,10 +9,8 @@
 var http = require('http');
 var url  = require('url');
 
-// variables
-var message = 'Hello to Pirple!';
-
 var server = http.createServer(function(req, ret) {
+	var message = 'Hello to Pirple!';
 	// get url
 	var parsedUrl = url.parse(req.url, true);
 	// get path
