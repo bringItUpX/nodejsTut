@@ -8,6 +8,7 @@
 //Dependencies
 var http = require('http');
 var url  = require('url');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 var server = http.createServer(function(req, ret) {
 	var message = 'Hello to Pirple!';
@@ -25,11 +26,25 @@ var server = http.createServer(function(req, ret) {
 	// get headers (use postman plugin for safari)
 	var headers = req.headers;
 
+	// receive payload
+	var decoder = new StringDecoder('utf-8');
+	var buffer = '';
+req.on('data', function (data){
+	buffer += decoder.write(data);
+})
+
+req.on('end', function (){
+	buffer += decoder.end();
+	
 	// send response
 	ret.end(message);
 
 	// log the send message
 	console.log('answer: ' + message);
+
+})
+
+
 })
 
 server.listen(3000, function(){
