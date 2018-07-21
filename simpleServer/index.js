@@ -36,17 +36,41 @@ req.on('data', function (data){
 req.on('end', function (){
 	buffer += decoder.end();
 	
-	// send response
-	ret.end(message);
+	var data = {
+		'method': method,
+		'query' : queryStringObject,
+		'path'  : trimmedPath,
+		'headers' : headers
+	};
 
-	// log the send message
-	console.log('answer: ' + message);
+	var chooseHandler = typeof(router[trimmedPath]) == 'undefined' ? handlers.notFound : router[trimmedPath];
+	chooseHandler(data, function(statusCode, data) {
+		statusCode = typeof(statusCode) == 'number' ? statusCode : 200;
+		data = typeof(data) == 'object' ? data : {};
 
+		// send response
+		ret.writeHead(statusCode);
+		ret.end(JSON.stringify(data));
+		// log the send message
+		console.log('statusCode: ' + statusCode + ' answer: ' + JSON.stringify(data));
+	})
 })
-
-
 })
 
 server.listen(3000, function(){
 	console.log('server has started to listing on port 3000');
 })
+
+var handlers = {};
+
+handlers.sample = function (data, callback){
+	callback(200, {"sample" : "sample-Value"});
+}
+
+handlers.notFound = function (data, callback){
+	callback(404, {});
+}
+
+var router = {
+	"sample" : handlers.sample
+};
