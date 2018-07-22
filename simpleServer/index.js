@@ -19,7 +19,7 @@ server.listen(3000, function(){
 })
 
 var unifiedServer = function(req, ret) {
-		var message = 'Hello to Pirple!';
+
 	// get url
 	var parsedUrl = url.parse(req.url, true);
 	// get path
@@ -66,12 +66,18 @@ req.on('end', function (){
 })
 }
 
+var message = 'Hello to Pirple!';
+
 // all handlers
 
 var handlers = {};
 
-handlers.sample = function (data, callback){
-	callback(200, {"sample" : "sample-Value"});
+handlers.hello = function (data, callback){
+	if (data.method == 'post'){
+		callback(200, {"hello" : message});
+	} else {
+		callback(404, {});
+	}
 }
 
 handlers.notFound = function (data, callback){
@@ -80,5 +86,5 @@ handlers.notFound = function (data, callback){
 
 // the router from path to right handler
 var router = {
-	"sample" : handlers.sample
+	"hello" : handlers.hello
 };
